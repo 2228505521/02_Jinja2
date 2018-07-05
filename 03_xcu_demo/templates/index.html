@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% from 'marcos.html' import item_group with context %}
+{% from 'marcos.html' import item_list with context %}
+
+{% block title_block %}
+豆瓣微信小程序-首页
+{% endblock %}
+
+{% block head_block %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body_block %}
+    {{ item_list('电影', movies = movies[0:3], category = 1) }}
+    {{ item_list('电视剧', movies = films[0:3], category = 2) }}
+{% endblock %}

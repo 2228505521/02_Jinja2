@@ -1,0 +1,40 @@
+{# item #}
+{% macro item_group(thumbnail, title, rating) %}
+    <div class="item-group">
+        <img src="{{ thumbnail }}" alt="" class="thumball">
+        <p class="title">{{ title }}</p>
+        <div class="rating">
+            <p class="xinxin">
+                {% set rating = rating|float %}
+                {% set lights = ((rating|int)/2)|int %}
+                {% set halfsb = (rating|int)%2 %}
+                {% set grays = 5 - lights - halfsb %}
+                {% for foo in range(0, lights) %}
+                    *
+                {% endfor %}
+                {% for foo in range(0, halfsb) %}
+                    $
+                {% endfor %}
+                {% for foo in range(0, grays) %}
+                    0
+                {% endfor %}
+            </p>
+            <p class="rating-text">{{ rating }}</p>
+        </div>
+    </div>
+{% endmacro %}
+
+{# item-list #}
+{% macro item_list(name, movies=[], category=category) %}
+    <div class="item-list-group">
+        <div class="item-list-top">
+            <span class="module-title">{{ name }}</span>
+            <a href="{{ url_for('item_list', category=category) }}" class="module-btn">更多</a>
+        </div>
+        <div class="list-group">
+            {% for movie in movies %}
+                {{ item_group(movie.url, movie.title, movie.raiting) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}

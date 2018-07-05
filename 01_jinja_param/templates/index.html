@@ -1,0 +1,170 @@
+{# 导入marcos宏文件 #}
+{% from 'marcos.html' import input with context %}
+{# 另一种导入方式 #}
+{% import 'marcos.html' as marcos %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>知了课堂</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</head>
+<body>
+    <p>这是从模板中渲染的数据</p>
+    <p1>{{ username,age }}</p1>
+    <p>{{ username }}</p>
+    <p>{{ age }}</p>
+    <p>{{ childrens.name }}</p>
+    <p>{{ childrens.get('name') }}</p>
+    {% for name in names %}
+        <p>{{ name }}</p>
+    {% endfor %}
+    <p>过滤器的使用：</p>
+    <p>position的绝对值为：{{ position|abs }}</p>
+    <p>sign如果不存在的时候显示默认值：{{ sign|default('此人很懒', boolean=True) }}</p>
+    {#  全局自动转义  #}
+    <p>执行自动转义：{{ sign|escape }}</p>
+    {% autoescape off %}
+        <p>执行自动转义：{{ sign|escape }}</p>
+    {% endautoescape %}
+    <p>关闭自动转义：{{ sign|safe }}</p>
+    <p>获取序列的一个元素：{{ names|first }}</p>
+    <p>获取序列的最后一个元素：{{ names|last }}</p>
+    <p>格式化字符串：{{ '%s=%s'|format('a', 'b') }}</p>
+    <P>获取列表的长度：{{ names|length }}</P>
+    {#  数据格式转换  #}
+    {% if age|int == 18 %}
+        <p>年龄是18岁</p>
+    {% else %}
+        <p>年龄不是18岁</p>
+    {% endif %}
+    {#  替换字符串  #}
+    <p>替换指定字符串：{{ replace|replace('hello', '1') }}</p>
+    {#  截取length长度的字符串  #}
+    <p>截取字符串：{{ replace|truncate(length=4) }}</p>
+    {#  删除字符串中所有html标签  #}
+    <p>删除后的字符串：{{ sign|striptags }}</p>
+    {#  自定义过滤器  #}
+    <p>自定义的过滤器：{{ replace|cut }}</p>
+    <p>现在时间为：{{ create_time|handle_time }}</p>
+
+    {#  if条件判断语句  #}
+    {% if age|int == 18 %}
+        <p>判断成功</p>
+    {% else %}
+        <p>判断不成功</p>
+    {% endif %}
+
+    {% if age|int >= 18 %}
+        <p>你可以进入网吧</p>
+    {% else %}
+        <p>你不可以进入网吧</p>
+    {% endif %}
+
+    {#  for循环控制语句  #}
+    <ul>
+    {#    遍历列表    #}
+        {% for foo in names %}
+            <li>{{ foo }}</li>
+        {% endfor %}
+    {#    遍历字典    #}
+        <table>
+           <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>年龄</th>
+                    <th>国家</th>
+                </tr>
+           </thead>
+            <tbody>
+                {# childrens.items()|reverse 反向遍历 #}
+                {% for key, value in childrens.items()|reverse %}
+                    <td>{{ value }}</td>
+                {% else %}
+                    <p>没有任何值</p>
+                {% endfor %}
+            </tbody>
+        </table>
+    </ul>
+    {# for循环中使用变量 #}
+    <table>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>书名</th>
+                <th>作者</th>
+                <th>价格</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                {% if loop.first %}
+                    <tr style="background: red">
+                {% elif loop.last %}
+                    <tr style="background: pink">
+                {% else %}
+                    <tr>
+                {% endif %}
+                    <td>{{ loop.index }}</td>
+                    <td>{{ loop.index0 }}</td>
+                    <td>{{ book.name }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.price }}</td>
+                </tr>
+                {% if loop.last %}
+                    <tr>总数：{{ loop.length }}</tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>总数：{{ books|length }}</p>
+    <br>
+    <table border="1">
+        <tbody>
+            {% for row in range(1, 10) %}
+                <tr>
+                    {% for row2 in range(1, row + 1) %}
+                         <td>{{ row2 }}*{{ row }}={{ row*row2 }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {# 宏和import语句 #}
+    <p>登录页面</p>
+    <table>
+        <tbody>
+            <tr>
+                <td>用户名：</td>
+                <td>{{ marcos.input('username', value=username) }}</td>
+            </tr>
+            <tr>
+                <td>密码：</td>
+                <td>{{ input('password', type='password') }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{ input(type='submit', value='登录') }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {# include标签的使用 #}
+    {% include 'common/header.html' %}
+    <div class="content">
+        中间的内容
+    </div>
+    {% include 'common/footer.html' %}
+    {# 项目中赋值、set和with语句 #}
+    {% set userid = 100 %}
+    <p>用户id：{{ userid }}</p>
+    {# with语句定义的变量只能在endwith以前有用，超出范围无效 #}
+    {% with classroom = '1班'  %}
+        <p>{{ classroom }}</p>
+    {% endwith %}
+    {# 加载静态文件 #}
+    <img src="{{ url_for('static', filename='imgs/IMG_1781.jpg') }}">
+</body>
+</html>

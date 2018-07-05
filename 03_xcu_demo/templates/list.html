@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% from 'marcos.html' import item_group %}
+
+{% block title_block %}
+豆瓣小程序-列表
+{% endblock %}
+
+{% block head_block %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/list.css') }}">
+{% endblock %}
+
+{% block body_block %}
+    {% for item in items %}
+        {{ item_group(item.url, item.title, item.raiting) }}
+    {% endfor %}
+{% endblock %}

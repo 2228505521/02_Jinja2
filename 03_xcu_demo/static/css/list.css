@@ -1,0 +1,43 @@
+.item-group {
+    margin-top: 10px;
+    float: left;
+    margin-right: 10px;
+    width: 100px;
+    padding-left: 10px;
+}
+
+.list-group {
+    overflow: hidden;
+}
+
+.item-group .thumball {
+    display: block;
+    width: 100px;
+    height: 145px;
+}
+
+.item-group .title {
+    font-size: 10px;
+    text-align: center;
+}
+
+.item-group .rating {
+    width: 100%;
+    overflow: hidden;
+}
+
+.item-group .rating .xinxin {
+    padding-left: 20px;
+    font-size: 10px;
+    display: block;
+    float: left;
+}
+
+.item-group .rating .rating-text {
+    color: #41be57;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 10px;
+    display: block;
+    float: left;
+}
